@@ -1,0 +1,26 @@
+name: Build windmill:main:simplified
+on:
+  workflow_dispatch
+
+jobs:
+  build:
+    uses: ./.github/workflows/docker-multi-platform.yml
+    with:
+      registry: docker.io
+      registry_username: ubicloud
+      image_name: 'ubicloud/windmill-test'
+      fetch_depth: 0
+      push_image: true
+      build_runner_cpus: 8
+      metadata_flavor: |
+        latest=false
+      metadata_labels: |
+        org.opencontainers.image.licenses=AGPLv3
+      build_args: |
+        features=embedding,parquet,openidconnect,jemalloc,deno_core,license,http_trigger,zip,oauth2,dind,php,mysql,mssql,bigquery,websocket,python,smtp,csharp,static_frontend,rust
+      checkout_ee: false
+    secrets: inherit # that makes secrets available to the called workflow
+  
+  #build_ee:
+   # uses: ./.github/workflows/docker-multi-platform.yml@main
+   # with: slightly different parameters than above
